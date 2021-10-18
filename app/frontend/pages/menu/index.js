@@ -44,6 +44,9 @@ const Menu = () => {
         <></>
       }
       <br/>
+      <Link to="/CarSearch">車両検索</Link>
+      <br/>
+      <Link to="/CarCreate">車両登録</Link>
       <br/>
       <LogoutButton />
     </main>

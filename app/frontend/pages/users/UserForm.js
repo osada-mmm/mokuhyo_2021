@@ -116,9 +116,16 @@ const UserForm = (props) => {
 
     axios.patch(url, JSON.parse(userJSON))
     .then(
-
+      () => {
+        alert("登録しました。");
+        history.push("/users");
+      }
     ).catch(
-
+      (error) => {
+        if (error.response.status === 400) {
+          alert("登録できません。");
+        }
+      }
     );
   }
 

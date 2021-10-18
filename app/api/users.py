@@ -82,4 +82,49 @@ def do_confirm(id):
 @users_bp.route("/api/users/<int:id>/update", methods=["patch"])
 @login_required
 def do_update(id):
-    print(id);
+    ##print(id);
+    """
+        ユーザ情報検証
+    """
+    params = request.get_json()
+    user = db.session.query(User).get(id)
+    user.login_id = params["user"]["login_id"]
+    user.password = params["user"]["password"]
+    user.user_name = params["user"]["user_name"]
+    db.session.commit()
+    return jsonify({}), 200
+
+@users_bp.route("/api/users/createConfirm", methods=["post"])
+@login_required
+def do_createConfirm():
+    params = request.get_json()
+        # 登録済か確認
+    user = db.session.query(User).filter_by(login_id=params["user"]["login_id"]).all();
+    if user:
+        return jsonify({'login_id': '登録済のユーザーです。'}), 400
+    
+    # DB定義を取得（処理はmodelsの方に書いている）
+    userCreate = User()
+
+    # 取得したパラメータをセット
+    userCreate.set_update_attribute(params)
+
+    return jsonify({}), 200
+
+@users_bp.route("/api/users/create", methods=["post"])
+@login_required
+def do_create():
+    params = request.get_json()
+    print(params);
+    # DB定義を取得（処理はmodelsの方に書いている）
+    userCreate = User()
+
+    # 取得したパラメータをセット
+    userCreate.set_update_attribute(params)
+
+
+    # 値は設定されているのでコミット
+    db.session.add(userCreate)
+    db.session.commit()
+    
+    return jsonify({}), 200
